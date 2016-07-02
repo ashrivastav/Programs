@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void permute(auto str, auto start, auto end)
+void permute(auto& str, auto start, auto end)
 
 {
 
