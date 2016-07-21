@@ -10,14 +10,17 @@ void three_way_partition(vector<int> &v)
     auto low = 0, mid = 0;
     auto  high = v.size() - 1;
 
+    // increment low till we are finding 0's, as they are already in correct place
     while(low < high && v[low] == 0)
         low++;
 
+    // decrement high till we are finding 2's as they are already in correct place
     while(high > 0 && v[high] == 2)
         high--;
 
     mid = low;
 
+    // loop and decide what to do if v[mid] is 0,1 or 2.
     while(mid < high)
     {
         switch(v[mid])
