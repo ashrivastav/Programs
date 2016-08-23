@@ -203,11 +203,12 @@ int main()
 	mynode *first=NULL;
 	mynode *second=NULL;
 	mynode *sum=NULL;
-	//insert(&first,1);
-	//insert(&first,2);
-	//insert(&first,5);
-	//insert(&first,4);
+	insert(&first,1);
+	insert(&first,2);
+	insert(&first,5);
+	insert(&first,4);
 	insert(&first,9);
+    insert(&first,10);
 	//insert(&first,3);
 	//effInsert(&second,1 );
 	effInsert(&second,9);
