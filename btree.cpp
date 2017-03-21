@@ -1,5 +1,8 @@
 #include<malloc.h>
 #include<stdlib.h>
+#include <limits.h>
+#include <iostream>
+using namespace std;
 
 /* Program for performing various operations on trees (Binary Search tree Included) */
 
@@ -10,7 +13,7 @@ struct node{
 	struct node *right;
 };
 
-/*Create a new node */
+/*Create a root node */
 struct node* create(int val)
 {
 
@@ -22,20 +25,20 @@ struct node* create(int val)
 }
 
 /* Insert into binary search tree */
-struct node* insert(struct node *new,int val)
+struct node* insert(struct node *root,int val)
 {
-	/* If new node is the first node or any of its childs points to NULL(end of recursion), then return the newly created node*/
-	if(new==NULL)
+	/* If root node is the first node or any of its childs points to NULL(end of recursion), then return the rootly created node*/
+	if(root==NULL)
 		return(create(val));
-	/* If node data is less than the newly inserted data, then insert into the right child recursively*/
-	else if (new->data <= val)
-		new->right = insert(new->right,val);
-	/* If node data is greater than the newly inserted data, then insert into the left child recursively */
-	else if (new->data > val)
-		new->left = insert(new->left,val);
+	/* If node data is less than the rootly inserted data, then insert into the right child recursively*/
+	else if (root->data <= val)
+		root->right = insert(root->right,val);
+	/* If node data is greater than the rootly inserted data, then insert into the left child recursively */
+	else if (root->data > val)
+		root->left = insert(root->left,val);
 	
 	/* In case of recursion(intermediate) assign same node to itself(No change in pointers in intermediate recursion */
-	return (new);
+	return (root);
 }
 
 /* Inorder traversal of a tree rooted at r */
@@ -180,6 +183,22 @@ int compareTrees(struct node *r1, struct node *r2)
 		return (compareTrees(r1->left,r2->left) && compareTrees(r1->right, r2->right));
 
 }
+bool isbst(struct node* root, int &last_val)
+{
+	if(root == nullptr)
+		return true;
+
+	if(!isbst(root->left, last_val))
+		return false;
+
+	if(last_val > root->data){
+		//cout << "Last val" << last_val <<"node val" << root->data;
+		return false;
+	}
+	 last_val = root->data;
+
+	 return (isbst(root->right, last_val));
+}
 
 int main()
 {
@@ -193,6 +212,7 @@ int main()
 	root=insert(root,25);
 	root=insert(root,1);
 	root=insert(root,2);
+	root->left = insert(root->left, 23);
 	root=insert(root,45);
 	root=insert(root,42);
 	root=insert(root,50);
@@ -212,7 +232,9 @@ int main()
 	printf("\nThe inorder traversal of Binary Search tree 2  -->  ");
 	inorder(root1);
 	printf("\nBoth the trees are equal ? --->  %d \n", compareTrees(root,root1));
-	
+	int min_val = INT_MIN;
+	cout << "Is bst?:" << boolalpha << isbst(root, min_val) << endl;
+
 	//mirror(root);
 	//printf("\nThe inorder traversal of Binary Search tree ");
 	inorder(root);

@@ -197,6 +197,32 @@ mynode* addList(mynode *first, mynode *second)
 		return addition;
 	}
 
+mynode*  reverse_list(mynode* first)
+{
+    mynode * temp = NULL;
+    if(first->next != NULL) {
+        temp = reverse_list(first->next);
+        first->next->next = first;
+        first->next = NULL;
+        return temp;
+    } else
+        return first;
+}
+
+void printnthlast(mynode *node, int n)
+
+{
+    static int num = n;
+    if (node == nullptr)
+        return;
+
+    printnthlast(node->next, n);
+    num--;
+
+    if(num ==0)
+        cout << "Number is" << node->data;
+}
+
 int main()
 {
 
@@ -211,17 +237,21 @@ int main()
     insert(&first,10);
 	//insert(&first,3);
 	//effInsert(&second,1 );
-	effInsert(&second,9);
-	effInsert(&second,0);
-	printList(first);
-	printList(second);
-	cout<< "The number of nodes in first linked list is " << countNodes(first)<<endl;
-	cout<< "The number of nodes in first linked list is " << countNodes(second)<<endl;
-	sum=addList(first,second);	
+//	effInsert(&second,9);
+//	effInsert(&second,0);
+//	printList(first);
+//	printList(second);
+//	cout<< "The number of nodes in first linked list is " << countNodes(first)<<endl;
+//	cout<< "The number of nodes in first linked list is " << countNodes(second)<<endl;
+//	sum=addList(first,second);	
 	//sum=copy(&second);
-	printList(sum);
+//	printList(sum);
 	//head=reverseList(&head);
-	
+    printList(first);
+    cout << "Reversing it"<< endl;
+    first = reverse_list(first);
+    printList(first);
+    printnthlast(first, 5);
 	//printList(head);
 	return 0;
 }
