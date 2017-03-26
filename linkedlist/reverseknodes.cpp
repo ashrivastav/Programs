@@ -83,26 +83,49 @@ Node* reversekelem(Node* head, int count)
     return prev;
 }
 
+/* Elegant and awesome recusion*/
+Node* reverse_recur(Node *curr)
+{
+    Node *new_head = nullptr; // Return new head after recursion ends
+    if(curr->next)
+    {
+        new_head = reverse_recur(curr->next); // return new_head after each call
+        curr->next->next = curr; // Pointer manipulation, make curr->next->next point to current node
+        curr->next = nullptr; // make current next to null 
+    } 
+    else
+      new_head = curr; // Assign new head when recusion ends
+
+   return new_head; // return new_head always
+}
 
 int main()
 {
     Node *head = nullptr;
 
+    random_device r;//get random device for seed
+
+    mt19937 gen(r()); // initialize generator with seed
+
+    uniform_int_distribution<int> dis; // which type of random number is needed
+
     for(int i =12; i > 0 ;i--)
     {
-        insert(ref(head), i);
+        insert(ref(head), dis(gen) % 100);
     }
 
-
     printlist(head);
 
     head = reversekelem(head, 4);
     printlist(head);
+    
     head = reversekelem(head, 4);
-
     printlist(head);
 
     head = reverse_alternate(head, 3);
-
     printlist(head);
+
+    head = reverse_recur(head);
+    printlist(head);
+
 }
