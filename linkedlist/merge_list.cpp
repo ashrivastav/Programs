@@ -44,37 +44,31 @@ void printList(struct node *node)
 		printf("%d ", node->data);
 		node = node->next;
 	}
+    printf("\n");
 }
 
-struct node* SortedMerge(struct node *a, struct node *b)
+struct node* SortedMerge(struct node *first, struct node *second)
 {
-	struct node result;
-	struct node* prevb = nullptr, *preva = nullptr;
-	while(1)
-	{
-		if(a == nullptr)
-		{
-			tail->next = b;
-			return;
-		}
+    struct node *result;
+    if(!first)
+        return second;
 
-		if(b == nullptr)
-		{
-			tail->next = a;
-			return;
-		}
+    if(!second)
+        return first;
 
-		if(a->data <= b->data)
-		{
-			tail
-
-		} else
-		{
-
-		}
-
-
+    if(first->data < second->data)
+    {
+        result = first;
+        result->next = SortedMerge(first->next, second);
 	}
+
+    if(second->data < first->data)
+    {
+        result = second;
+        result->next = SortedMerge(first, second->next);
+    }
+
+    return result;
 }
 
 /* Drier program to test above functions*/
@@ -96,6 +90,8 @@ int main()
 	push(&b, 3);
 	push(&b, 2);
 
+	printList(a);
+	printList(b);
 	/* Remove duplicates from linked list */
 	res = SortedMerge(a, b);
 
