@@ -101,13 +101,9 @@ Node* reverse_recur(Node *curr)
 
 void delete_elems(Node *head)
 {
-    if(!head)
-        return;
-
-    int max = head->data;
-
-    while(head->next)
+    while(head && head->next)
     {
+        int max = head->data;
         if(head->next->data < max)
         {
             Node *next = head->next;
@@ -116,9 +112,7 @@ void delete_elems(Node *head)
         } else{
             head = head->next;
         }
-    max = head->data;
     }
-
 }
 
 Node * delete_rg(Node *curr)
