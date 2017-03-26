@@ -99,6 +99,37 @@ Node* reverse_recur(Node *curr)
    return new_head; // return new_head always
 }
 
+void delete_elems(Node *head)
+{
+    if(!head)
+        return;
+
+    int max = head->data;
+
+    while(head->next)
+    {
+        if(head->next->data < max)
+        {
+            Node *next = head->next;
+            head->next = head->next->next;
+            delete next;
+        } else{
+            head = head->next;
+        }
+    max = head->data;
+    }
+
+}
+
+Node * delete_rg(Node *curr)
+{
+    Node *head = reverse_recur(curr);
+
+    delete_elems(head);
+
+    return reverse_recur(head);
+}
+
 int main()
 {
     Node *head = nullptr;
@@ -111,7 +142,7 @@ int main()
 
     for(int i =12; i > 0 ;i--)
     {
-        insert(ref(head), dis(gen) % 100);
+        insert(ref(head), dis(gen) % 20000);
     }
 
     printlist(head);
@@ -126,6 +157,9 @@ int main()
     printlist(head);
 
     head = reverse_recur(head);
+    printlist(head);
+
+    head = delete_rg(head);
     printlist(head);
 
 }
