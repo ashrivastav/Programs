@@ -3,6 +3,8 @@
 #include <queue>
 #include <algorithm>
 #include <tuple>
+#include <map>
+#include <limits.h>
 
 using namespace std;
 
@@ -464,59 +466,105 @@ bool has_path_sum(Node *root, int sum)
 	return(has_path_sum(root->left, subsum) || has_path_sum(root->right, subsum));
 }
 
+/* Vertical order traversal of tree */
+void vertical_order_print(Node *root)
+{
+	multimap<int,int> mmap;
+	
+	if (!root) 
+		return;
+		
+	queue<pair<Node*, int>> myqueue;
+	myqueue.push(make_pair(root, 0));
+	int min_vd = INT_MAX; 
+	int max_vd = INT_MIN;
+	int vd = 0;	
+	while(!myqueue.empty()) {
+		pair<Node*, int> q_node = myqueue.front();
+		myqueue.pop();
+		if (q_node.first) {
+			int vd = q_node.second;
+			
+			if (vd < min_vd)
+				min_vd = vd;
+			if (vd > max_vd)
+				max_vd = vd;
+
+			auto node = q_node.first;
+			mmap.insert(make_pair(vd,node->data));
+			if (node->left) 
+				myqueue.push(make_pair(node->left, vd - 1));
+			if (node ->right)
+				myqueue.push(make_pair(node->right, vd + 1));
+		}
+	}
+
+	for (int i = min_vd; i <= max_vd ; i++) {
+		auto it = mmap.equal_range(i);
+		cout << "Vertical Distance " << i << "-->"  ;
+		for (auto iter = it.first; iter != it.second; iter++)
+		{
+			cout << iter->second << " ";
+		}
+		cout << endl;
+	}
+	
+}
+
 int main()
 {
 	//vector<Node *> vec; // Vector for printing all path from root to leaves
+	/*
+	   Node *root = new Node(1);
+	   root->left = new Node(2);
+	   root->right = new Node(2);
+	   root->left->left = new Node(3);
+	   root->left->right = new Node(4);
+	   root->right->right = new Node(3);
+	   root->right->left = new Node(4);
+	   root->left->right->left = new Node(7);
+	   root->left->right->right = new Node(8);
+	   root->right->left->left = new Node(8);
+	   root->right->left->right = new Node(7);
+	   cout << boolalpha << is_mirror(root);
+	   cout << min_height(root);
+	   cout << boolalpha << has_path_sum(root, 14);
 
-	Node *root = new Node(1);
-	    root->left = new Node(2);
-	    root->right = new Node(2);
-	    root->left->left = new Node(3);
-	    root->left->right = new Node(4);
-	   // root->right->right = new Node(3);
-	   // root->right->left = new Node(4);
-	    //root->left->right->left = new Node(7);
-	    root->left->right->right = new Node(8);
-	    //root->right->left->left = new Node(8);
-	   // root->right->left->right = new Node(7);
-//	    cout << boolalpha << is_mirror(root);
-	//    cout << min_height(root);
-	    cout << boolalpha << has_path_sum(root, 14);
-
-	// int total_sum = 0, curr_sum =0;
-	 // sum(root, total_sum, curr_sum);
-	  //cout << "Total sum:" << total_sum;
-
+	   int total_sum = 0, curr_sum =0;
+	   sum(root, total_sum, curr_sum);
+	   cout << "Total sum:" << total_sum;
+	 */
 	//    find_next_on_level(root, 14);
-	  /* Node *root = new Node(1);
-    root->left = new Node(2);
-    root->right = new Node(3);
-    root->left->left = new Node(4);
-    root->left->right = new Node(5);
-    root->right->left = new Node(6);
-    root->right->right = new Node(7);
-    root->left->left->left = new Node(8);
-    root->left->left->right = new Node(9);
-    root->left->right->left = new Node(10);
-    root->left->right->right = new Node(11);
-    root->right->left->left = new Node(12);
-    root->right->left->right = new Node(13);
-    root->right->right->left = new Node(14);
-    root->right->right->right = new Node(15);
-    root->left->left->left->left = new Node(16);
-    root->right->right->right->right = new Node(31); */
-  //  cout << "Max width is : " << max_width_of_tree(root) << endl;
-   // connect_nodes(root);
+	Node *root = new Node(1);
+	root->left = new Node(2);
+	root->right = new Node(3);
+	root->left->left = new Node(4);
+	root->left->right = new Node(5);
+	root->right->left = new Node(6);
+	root->right->right = new Node(7);
+	root->left->left->left = new Node(8);
+	root->left->left->right = new Node(9);
+	root->left->right->left = new Node(10);
+	root->left->right->right = new Node(11);
+	root->right->left->left = new Node(12);
+	root->right->left->right = new Node(13);
+	root->right->right->left = new Node(14);
+	root->right->right->right = new Node(15);
+	root->left->left->left->left = new Node(16);
+	root->right->right->right->right = new Node(31); 
+	vertical_order_print(root);
+	//  cout << "Max width is : " << max_width_of_tree(root) << endl;
+	// connect_nodes(root);
 
-  // print_spiral(root);
- //   print_extremes(root); cout << endl;
-  //  print_given_level(root, 4); cout << endl;
-  //  print_cousins(root,root->right->right); cout << endl;
-    //print_level_order(root); cout << endl;
-    //cout << max_depth(root);
-    //print_all_nodes_to_leaf(root, vec);
-     //cout << count_leaves_nodes(root);
-     cout << endl;
+	// print_spiral(root);
+	//   print_extremes(root); cout << endl;
+	//  print_given_level(root, 4); cout << endl;
+	//  print_cousins(root,root->right->right); cout << endl;
+	//print_level_order(root); cout << endl;
+	//cout << max_depth(root);
+	//print_all_nodes_to_leaf(root, vec);
+	//cout << count_leaves_nodes(root);
+	cout << endl;
 
 }
 
