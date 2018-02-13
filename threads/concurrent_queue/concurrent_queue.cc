@@ -13,8 +13,8 @@ using namespace std;
 template<typename T>
 class Queue_ts {
   private:
-    queue<T> queue_; 
-    atomic<long long> size_;
+    queue<T> queue_;
+    atomic<long long> size_; 
     mutex qmutex_;
     condition_variable cv_;
 
@@ -38,6 +38,7 @@ class Queue_ts {
       cv_.notify_all();
       }
 
+    /* Can be useful to wait for queue object */
     bool empty() const {
       if (size_ == 0)
         return true;
@@ -74,7 +75,7 @@ class Worker {
      // cout << stream.str();
       T data;
       while (data < 10000000) {
-       queue_.pop(data); // pop it will sleep if queue is empty
+       queue_.pop(data); // pop it will sleep/block if queue is empty, and return data as soon as it is available
        stream.str("");
    //  stream << "\nConsumer: " <<data << "\n ";
        cout << stream.str();
