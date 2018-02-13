@@ -46,14 +46,13 @@ int Graph::worker(int seconds)
 
 void Graph::topological_sort()
 {
-  queue<int> q;
-  vector<int> result;
+  queue<int> q; // Queue for adding next zero indegree node
+
   int pending = 0;
-  bool *visited = new bool[vertices];
   int indegree[vertices];
+  
   for (int i = 1; i < vertices ;i++)
   {
-    visited[i] = false;
     indegree[i] = 0;
   }
 
@@ -78,27 +77,28 @@ void Graph::topological_sort()
   while(!q.empty() || pending)
   {
     if (!q.empty()) {
-    auto vertex = q.front();
-    q.pop();
-    pending_task.push_back(async(std::launch::async, &Graph::worker, vertex));
+      auto vertex = q.front();
+      q.pop();
+      pending_task.push_back(async(std::launch::async, &Graph::worker, vertex));
     }
-  for (auto &i : pending_task)
-  {
-    int completed_task;
-    if (i.valid() == true && i.wait_for(chrono::seconds(0)) == future_status::ready &&
-      (completed_task = i.get())) {
-      pending--;
-      for (auto &j : adj[completed_task])
-      {
-        indegree[j]--; 
-        if(indegree[j] == 0){
-          q.push(j);
-          pending++;
+
+    for (auto &i : pending_task)
+    {
+      int completed_task;
+      if (i.valid() == true && i.wait_for(chrono::seconds(0)) == future_status::ready &&
+          (completed_task = i.get())) {
+        pending--;
+        for (auto &j : adj[completed_task])
+        {
+          indegree[j]--; 
+          if(indegree[j] == 0){
+            q.push(j);
+            pending++;
+          }
         }
       }
+
     }
-   
-  }
 }
 }
 
