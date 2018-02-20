@@ -18,9 +18,14 @@ public:
   void add_edge(int u, int v) {
     adj[u].push_back(v);
   }
+  static int worker(int time);
   void print_graph(); 
   void topological_sort();
-  static int worker(int time);
+  
+  /* Recursive way of topological sort */
+  stack<int> result;
+  void topological_sort_v1();
+  void topological_sort_v1_helper(int, vector<bool>&);
 };
 
 void Graph::print_graph()
@@ -102,6 +107,36 @@ void Graph::topological_sort()
 }
 }
 
+void Graph::topological_sort_v1_helper(int vertex, vector<bool>& visited)
+{
+  visited[vertex] = true;
+
+  for(auto &i : adj[vertex])
+  {
+    if (visited[i] == false)
+      topolocial_sort_v1_helper(i, visited);
+  }
+
+  result.push(i);
+}
+
+void Graph::topological_sort_v1()
+{
+  vector<bool> visited(vertices+1,false);
+  for(int i =1; i < (vertices +1) ; i++)
+  {
+    if (visited[i] == false)
+      topological_sort_v1_helper(i, visited);
+  }
+
+  cout << "Topolocial sort is";
+  while(!result.empty()){
+    cout << result.top() <<" " ;
+    result.pop();
+  }
+
+
+}
 
 int main()
 {
@@ -122,4 +157,5 @@ int main()
   }
   g.print_graph();
   g.topological_sort();
+  g.topological_sort_v1(); //recursive
 }
