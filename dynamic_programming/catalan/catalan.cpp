@@ -19,19 +19,39 @@ long long ComputeCatalan(long long numKeys)
     return count;
 }
 
-
+// Memoization
 long long ComputeCatalanDynamic(long long numKeys)
 {
   vector<long long> catalanNum;
   catalanNum.reserve(5000);
   catalanNum[0] = 1; // Null tree, needed for recursion
-
+  catalanNum[1] = 1; // Null tree, needed for recursion
+  
   int count = 0;
-  for(int i = 1; i <= numKeys; i++)
+  for(int i = 2; i <= numKeys; i++)
   {
-    for( int j = 0 ; j < i; j++ )
+    catalaNum[i] = 0;
+    for( int j = 0 ; j < i; j++ ) // Use lower
     {
-      catalanNum[i] += catalanNum[numKeys - i ] * catalanNum [i -1];
+      catalanNum[i] += catalanNum[j] * catalanNum [i - j - 1];
+    }
+  }
+
+  return catalanNum[numKeys];
+}
+
+// Memoization
+long long ComputeCatalanDynamic1(long long numKeys)
+{
+  catalanNum[0] = 1; // Null tree, needed for recursion
+  catalanNum[1] = 1; // Null tree, needed for recursion
+  
+  if catalaNum
+  {
+    catalaNum[i] = 0;
+    for( int j = 1 ; j <= numkeys; j++ ) // Use lower
+    {
+      catalanNum[i] += catalanNum[j] * catalanNum [i - j - 1];
     }
   }
 
@@ -41,6 +61,9 @@ long long ComputeCatalanDynamic(long long numKeys)
 
 int main()
 {
+  vector<long long> catalanNum;
+  catalanNum.reserve(5000);
+  catalanNum.fill();
   long long numKeys = 0 ;
   cin >> numKeys;
   cout << "Catalan Number" << ComputeCatalanDynamic(numKeys) << endl;  
