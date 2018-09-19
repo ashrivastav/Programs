@@ -7,7 +7,6 @@ using namespace std;
 
 class MaxHeap {
   vector<int> arr_;
-  int size_;
   
   int Parent(int index)
   {
