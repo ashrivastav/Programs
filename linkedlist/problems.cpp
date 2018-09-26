@@ -210,6 +210,8 @@ void alternate_split_end(Node *source, Node * &first, Node * &second)
 	source = nullptr;
 }
 
+void reverseList()
+
 int main()
 {
     Node *head = nullptr;

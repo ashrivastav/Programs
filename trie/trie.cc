@@ -21,6 +21,18 @@ class Trie {
 
 bool Trie::InsertWord(const std::string &pattern) 
 {
+  TrieNode *parent = &rootPtr_;
+  for(int i = 0; i< pattern.size(); i++) {
+    if(childrens_.find(string[i]) != childerns_.end()) {
+
+      TrieNode *trieNode  = new TrieNode();
+      trieNode->parent_ = parent;
+      childrens_[string[i]] = trieNode;
+      parent_ = trieNode;
+    } else {
+    }
+
+    }
 
 }
 

@@ -9,24 +9,31 @@
 using namespace std;
 
 class Graph {
-public:
+
+private:
+  
   int vertices;
-  list<int> *adj;
+  vector<int> *adj;
+
+public:
   Graph(int v):vertices(v) {
-    adj = new list<int>[v];
+    adj = new vector<int>[v];
   }
+
   void add_edge(int u, int v) {
     adj[u].push_back(v);
   }
-  static int worker(int time);
+
   void print_graph(); 
   void topological_sort();
   
   /* Recursive way of topological sort */
   stack<int> result;
-  void topological_sort_v1();
-  void topological_sort_v1_helper(int, vector<bool>&);
+  void topological_sort_recursive();
+  void topological_sort_helper(int, vector<bool>&);
 };
+
+int worker(int time);
 
 void Graph::print_graph()
 {
@@ -41,7 +48,7 @@ void Graph::print_graph()
 }
 
 /* Task number is number of seconds to wait */
-int Graph::worker(int seconds)
+int worker(int seconds)
 {
   cout << "\nTask for " << seconds << " seconds started\n" ;
   sleep(seconds);
@@ -54,13 +61,8 @@ void Graph::topological_sort()
   queue<int> q; // Queue for adding next zero indegree node
 
   int pending = 0;
-  int indegree[vertices];
-  
-  for (int i = 1; i < vertices ;i++)
-  {
-    indegree[i] = 0;
-  }
-
+  vector<int> indegree(vertices, 0);
+ 
   for(int i=1 ; i < vertices ; i++)
   {
     for (auto &j : adj[i])
@@ -73,7 +75,6 @@ void Graph::topological_sort()
     cout << "Indegree for vertex " << i << "is" << indegree[i] << endl;
     if(indegree[i] == 0) {
       q.push(i);
-      pending++;
     }
   }
 
@@ -82,51 +83,53 @@ void Graph::topological_sort()
   while(!q.empty() || pending)
   {
     if (!q.empty()) {
-      auto vertex = q.front();
+      int vertex = q.front();
       q.pop();
-      pending_task.push_back(async(std::launch::async, &Graph::worker, vertex));
+      pending_task.push_back(async(std::launch::async, worker, vertex));
+      pending++;
     }
 
-    for (auto &i : pending_task)
+    for (auto &fut : pending_task)
     {
       int completed_task;
-      if (i.valid() == true && i.wait_for(chrono::seconds(0)) == future_status::ready &&
-          (completed_task = i.get())) {
+      if (fut.valid() == true && 
+          fut.wait_for(chrono::seconds(0)) == future_status::ready &&
+          (completed_task = fut.get())) 
+      {
         pending--;
+
         for (auto &j : adj[completed_task])
         {
           indegree[j]--; 
-          if(indegree[j] == 0){
-            q.push(j);
-            pending++;
-          }
+          if(indegree[j] == 0)
+            q.push(j);   
         }
       }
-
     }
 }
 }
 
-void Graph::topological_sort_v1_helper(int vertex, vector<bool>& visited)
+void Graph::topological_sort_helper(int vertex, vector<bool>& visited)
 {
   visited[vertex] = true;
 
   for(auto &i : adj[vertex])
   {
     if (visited[i] == false)
-      topolocial_sort_v1_helper(i, visited);
+      topological_sort_helper(i, visited);
   }
 
-  result.push(i);
+  result.push(vertex);
 }
 
-void Graph::topological_sort_v1()
+void Graph::topological_sort_recursive()
 {
   vector<bool> visited(vertices+1,false);
+
   for(int i =1; i < (vertices +1) ; i++)
   {
     if (visited[i] == false)
-      topological_sort_v1_helper(i, visited);
+      topological_sort_helper(i, visited);
   }
 
   cout << "Topolocial sort is";
@@ -134,8 +137,6 @@ void Graph::topological_sort_v1()
     cout << result.top() <<" " ;
     result.pop();
   }
-
-
 }
 
 int main()
@@ -157,5 +158,5 @@ int main()
   }
   g.print_graph();
   g.topological_sort();
-  g.topological_sort_v1(); //recursive
+  //g.topological_sort_recursive(); //recursive
 }
