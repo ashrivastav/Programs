@@ -445,7 +445,7 @@ bool is_mirror(Node *root)
 int min_height(Node *root)
 {
 	if(root == nullptr)
-		return 0;
+		return -1;
 
 	return( min(min_height(root->left), min_height(root->right)) + 1);
 }

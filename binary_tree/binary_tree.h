@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include <stack>
 
-using namespace std;
 
 /* A tree node structure */
 struct Node {
@@ -29,8 +28,21 @@ struct Node {
       
 };
 
+/* Bottom View: 16 8 4 12 6 14 7 15 31 */
+/* Vertical order:
+16 
+8 
+4 
+2 9 10 12 
+1 5 6 
+3 11 13 14 
+7 
+15 
+31 
+*/
+
 class Tree {
-  public:
+  public: 
   Node *root;
   Tree() {
 	root = new Node(1);
