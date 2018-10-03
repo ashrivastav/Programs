@@ -8,15 +8,13 @@
 #include <queue>
 using namespace std;
 
+/* Directed Graph for Topological Sort */
 class Graph {
-
 private:
-  
   int vertices;
   vector<int> *adj;
-
 public:
-  Graph(int v):vertices(v) {
+  Graph(int v):vertices(v + 1) {
     adj = new vector<int>[v];
   }
 
@@ -61,7 +59,8 @@ void Graph::topological_sort()
   queue<int> q; // Queue for adding next zero indegree node
 
   int pending = 0;
-  vector<int> indegree(vertices, 0);
+  vector<int> indegree(vertices, 0); //vector of indegree for all vertices 
+                                     //initialized to zero
  
   for(int i=1 ; i < vertices ; i++)
   {
@@ -145,7 +144,7 @@ int main()
   cout.sync_with_stdio(true);
   cout << "Provide number of vertices in graph";
   cin >> vertices;
-  Graph g(vertices + 1);
+  Graph g(vertices);
   cout << "Number of edges in graph";
   cin >> edges;
 
