@@ -24,6 +24,7 @@ void PrintNum(int threadval)
 		cout << "Thread id:" << this_thread::get_id() <<" Counter:" << counter++ << endl;
 		guard.unlock();
 		printcv[((threadval+1) % numThreads)].notify_one();
+		//sleep after notify
 		this_thread::sleep_for(chrono::seconds(1));
 	}
 }
