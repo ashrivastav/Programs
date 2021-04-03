@@ -7,7 +7,7 @@ using namespace std;
 
 void three_way_partition(vector<int> &v)
 {
-    auto low = 0, mid = 0;
+    auto low = 0, iterator = 0;
     auto  high = v.size() - 1;
 
     // increment low till we are finding 0's, as they are already in correct place
@@ -18,22 +18,22 @@ void three_way_partition(vector<int> &v)
     while(high > 0 && v[high] == 2)
         high--;
 
-    mid = low;
+    iterator = low;
 
-    // loop and decide what to do if v[mid] is 0,1 or 2.
-    while(mid < high)
+    // loop and decide what to do if v[iterator] is 0,1 or 2.
+    while(iterator < high)
     {
-        switch(v[mid])
+        switch(v[iterator])
         {
             case 0:
-                swap(v[mid], v[low]);
+                swap(v[iterator], v[low]);
                 low++;
                 break;
             case 1:
-                mid++;
+                iterator++;
                 break;
             case 2:
-                swap(v[mid],v[high]);
+                swap(v[iterator],v[high]);
                 high--;
                 break;
         }
